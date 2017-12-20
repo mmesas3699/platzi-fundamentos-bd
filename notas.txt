@@ -51,8 +51,6 @@ Tipos de bases de datos y sus aplicaciones en la industria.
 		 - Cassandra: Base de datos del proyecto Apache. Trabaja con grandes volumenes de datos.
 		 - MongoDB: Base de datos noSQL que se basa en trabajar en varias instancias.
 
-	________
-		 
 		– Bases de datos “Clave” – “Valor”: Es el modelo de NoSQL más popular y sencilla en cuanto a funcionalidad.
 		– Bases de datos “Documentales”: Este tipo es el más versátil ya que guarda información como un documento generalmente de
 		  tipo JSON o XML.
@@ -107,4 +105,108 @@ Visión general de los datos
 
 
 Tipos de datos
+
+	- Caracteres: Pueden ser desde letras hasta caracteres especiales.
+	- Numérico: Del 0 al 9 pero con una longitud especial.
+	- Varchar: Caracteres con un formato más variable.
+	- Imagen
+	- Fecha: Generalmente van acompañadas de una hora.
+	- Moneda: esto facilita todo si se trabaja con diferentes denominaciones.
+	- Texto: Variables que tienen mayor tamaño que un char o que un varchar.
+	- Bit: Se puede trabajar con 1 y 0 o también con verdadero y falso.
+	- Decimal
+
+	** La mayoría de estos tipos de datos se basan en el stándar SQL92, los cuales son aplicables a todas las bases de datos
+
+	- Esquema = Es la estructura lógica que va a tener una Base de Datos
+	- Instancia = Contenido de partículas que tiene una Base de Datos en un instante de tiempo.
+
+	** Para poder modelar se debe describir:
+
+		1. Datos.
+		2. Relación entre los datos
+		3. Restricciones de los datos
+
+	Para hacer la descripción de la base de datos:
+
+		1. DML: Data Manipulation Language o Lenguaje de Manipulación de Datos: Es un lenguaje procedimental y declarativo, contiene un
+			conjunto de instrucciones que va ayudar en el proceso de construcción de la BD.
+
+		2. DDL: Data Definition Language o Lenguaje de Definición de Datos: Especifico el esquema de la BD, generar diccionarios de 
+			datos, las restricciones de integridad y las autorizacion para que ciertos usuarios no vean cierta data.
+
+		3. SQL: Structured Query Language o Lenguaje de Consulta Estructurada
+
+	Otros tipos de bases de datos:
+
+		- Bases de datos relacionales.
+		- Basadas en objetos relacionales.
+		- XML
+		- NoSQL
+		- In-Memory
+
+
+Diferentes tipos de bases de datos
+
+	SQL:
+		* Lenguaje estructurado
+		* Esquemas de tablas
+		* Integración con otros tipos de archivos
+		* Indexación por medio de árboles: La indexación funciona como un indice de un libro o de un temario, nos dice donde encontramos
+			un tema y en que pagina. La indexación en SQL se hace por medio de una estructura de arbol, esta nos permite hacer
+			busquedas. Existe el problema que cuando se buscan tipos de datos que no estan necesariamente estructurados en una
+			estructura de datos se busca desde el primer dato hasta el ultimo.
+		* Scale Up: Crecimiento Vertical
+
+		Ejemplos: PostgreSQL, MariaDB
+
+
+	NoSQL:
+		* Lenguaje estructurado
+		* Lenguaje no estructurado
+		* Diferente tipo de indexación, normalmente JSON:  no necesariamente funciona como un arbol, se pueden hacer indices
+			dividiendo los objetos por sus caracteristica y particularidades.
+		* Crecimiento horizontal
+
+		Ejemplos: MongoDB, Cassandra
+
+
+	Analiticas y de bigdata:
+		* Lenguaje no estructurado.
+		* Integración de muchos sistemas: Lo puedo integrar como a mi BD como a un filesystem
+		* Sistemas tradicionales y de engagement: Como twitter, facebook, podemos necesitar datos de ellos pero es necesario bajar 
+			toda la data de estos servicio.
+		* Principo divide y venceras: dividir el problema en problemas más pequeños.
+		* Basado en esquemas Scale out: crecimiento horizontal
+
+		Ejemplos: Hadoop, Hortonworks, Spark
+
+
+	Basadas en aceleración:
+		Se crearon para solucionar el inconveniente que se presenta al querer realizar una busqueda en el esquema de arbol sobre una 
+		inmensa cantidad de datos, donde la busqueda tomaria mucho tiempo.
+
+		* Normalmente basadas In-Memory: son muy rapidas PERO no tienen persistencia.
+		* Uso de aceleradores como GPU, Flash cards, FPGAs
+		* Estructuras diferentes por ejemplo basadas en nodos.
+		* Uso frecuente en ambientes empresariales productivos y de datawarehauose
+
+		Ejemplos: Redis, neo4j, Kinetica.
+
+
+	Formas de uso:
+		* On premise, open source: Que corre en mi maquina local y no necesita una gran infraestructura para desplegarla.
+		* Licenciamiento por cores y sockets: se paga dependiendo de ciertas características; como el hardware en el que va a correr.
+		* Licenciamiento modular: se paga por funcionalidades o modulos para necesidades diferentes.
+		* Pago por uso a través de SAAS (Software As A Service) ó PAAS (Platform As A Service): Es como adquirir una renta y pagar por
+		  	usar una base de datos.
+		* Suscripción de nodos de computo: funciona para plataformas como Hadoop el cual no es centralizado y trabaja de forma 
+			distribuida, se paga por nodo utilizado.
+
+*********
+Datawarehose: es un repositorio unificado para todos los datos que recogen los diversos sistemas de una empresa.
+	El repositorio puede ser físico o lógico y hace hincapié en la captura de datos de diversas fuentes sobre todo para fines
+	analíticos y de acceso.
+
+*********
 
