@@ -210,3 +210,93 @@ Datawarehose: es un repositorio unificado para todos los datos que recogen los d
 
 *********
 
+
+Hadoop
+
+	Espacio para averiguar sobre Hadoop
+
+
+
+Que es una entidad?
+
+	Entidad = Una abstracción del mundo real. Como en POO un objeto
+
+	Notación Barker's: Notación para representar bases de datos (Entidades y Relaciones). 
+		http://www.vertabelo.com/blog/technical-articles/barkers-erd-notation
+
+	Recomendación: El formato para trabajar con los IDs debe ser "number". No siempre va a poder ser así, pero
+	es lo más recomendable:
+
+	Ejemplo: Vamos representar la entidad CASA
+
+		 ___________________________
+		|							|
+		|		CASA 				|
+		|							|
+		|	# Número de ventanas    |---- number
+		|	# Número de puertas     |---- number
+		|	Color                   |---- character(30)
+		|	ID                      |---- number
+		|	Ubicación               |---- text
+		|___________________________|
+
+
+
+Que es una relación?
+
+	Para definir una relación tenemos que tener en cuenta los siguientes puntos:
+
+		* La obligatoriedad: Ésta se denota con una línea continua.
+		* Opcional: Se representa con una linea punteada.
+
+	La representación de la relación uno a muchos es con una pata de gallo
+
+
+	0 - 1 ----------- (cero a uno: es obligatorio pero solo se puede tener uno)
+	1 - 1 _______ (uno a uno: es obligatorio y solo se puede tener uno)
+	0 - M ----------- ≡ (cero a muchos: no es obligatorio y se puede tener muchos)
+	1 - M _______ ≡ (uno a muchos: es obligatorio y se puede tener muchos)
+	M - M ≡ ----------- ≡ (muchos a muchos: no es obligatorio y se puede tener muchos)
+
+
+
+Características o datos de una entidad
+
+	** Los indices deben ser valores únicos y numéricos. Se recomienda que sean de tipo "numérico" porque estos
+		tipos de datos son mas rápidos de encontrar por medio de una búsqueda, ya que solo hay 10 posibilidades
+		(0 a 9) de comparación a diferencia de un tipo de dato caracter donde hay que hacer al rededor de 70 
+		comparaciones.
+
+	- Entidad Fuerte: La constituyen las tablas principales de la BD, que contienen los registros principales
+		del sistema de información y que requieren de entidades o tablasauxiliares para completar su descripción
+		o información.
+
+	- Entidad Debil: Tablas auxiliares de una tabla principal a la que completan o complementan con la
+		información de sus registros relacionados.
+
+	¿Qué es un atributo?
+
+		Los atributos de una entidad son las características que lo identifican o lo definen.
+
+
+¿Ya aparecieron las llaves?
+
+	Las llaves nos dan acceso a los datos de una entidad, su notación es la de numeral #.
+
+	** Las llaves tienen que ser irrepetibles y obligatorias, por lo tanto el ID puede ser una llave.
+
+	** Una llave puede ser compuesta, esta se compone de 2 numeros, entre ID y Numero de seguro social. (Como
+		un numero de teléfono móvil).
+
+	Llaves foraneas:
+	** Las llaves foráneas son llaves que van a estar en nuestra tabla, que no necesariamente son nuestras llaves
+		primarias pero van a permitir acceder a otra tabla donde ahí sean llaves primarias.
+		Una llave foranea tiene que ser llave primaria de una tabla (entidad).
+
+	Las llaves son fundamentales por que son obligatoriamente índices, los cuales permiten encontrar los datos
+	cuando se necesitan de una forma rápida y ordenada.
+
+	Tuplas: las tuplas están formadas por datos de varias columnas en la misma fila.
+	Campo: El campo representa el tipo de dato.
+	Fila: fila es la unión de todos esos diferentes tipos de datos correspondientes a un registro.
+
