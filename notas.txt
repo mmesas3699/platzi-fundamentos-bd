@@ -300,3 +300,246 @@ Características o datos de una entidad
 	Campo: El campo representa el tipo de dato.
 	Fila: fila es la unión de todos esos diferentes tipos de datos correspondientes a un registro.
 
+
+
+Indices e indexación
+
+	Las llaves primarias siempre van ha ser indices
+	Las bases de datos indexan bajo el algoritma 'Arboles B+': https://estructurasite.wordpress.com/arbol-b/
+
+		   _______|_______		
+		__|__   __|__   __|__
+       |  |  | |  |  | |  |  |
+
+       Es un arbol con un tranco y principal y del cual se desprenden 3 raices y de cada raíz otras 3.....
+
+    Por defecto todas la bases de datos están indexadas asi NO tenga indices el primer atributo de una base de datos que se encuentra
+    oculto se llama 'RowID'.
+
+    Es importante que los indices sean numericos ya que la base de datos va a buscar la información siempre desde la primera rama (la
+    que este más a la izquierda) y recorrera rama por rama hasta que encuentre lo que busca. Esto puede tarder mucho si el arbol es muy
+    grande.
+
+
+Constrains o Restricciones
+
+	- Las restricciones se pueden trabajar desde la Base de Datos. Normalmente las validaciones con restricciones se hacen desde la
+	  aplicación, pero se puede hacer desde la Base de Datos.
+
+	- Las llaves primarias y las llaves foraneas no solamente tienen la restricción 'Not null', sino que además tienen la restricción
+	  'unique', no puede haber otra igual.
+
+	- Con 'check', las validaciones que podemos hacer son: Igual, mayor o igual, menor o igual, mayor qué o menor qué.
+
+
+
+Capas de abstracción del modelo Entidad-Relación
+
+	** Capa conceptual: En esta capa vamos a tener varias entidades, aún sin nombre definido. Las entidades van a tener cada una sus
+	   llaves primarias y sus atributos, además van a tener relaciones. Para que existan las relaciones “muchos a muchos” se necesitan
+	   llaves foráneas en las entidades.
+         ________             ________            _______
+	  	|		 |           |        |          |       |
+		| Ent1   |≡---------≡| Ent2   |---------≡| Ent3  |
+		|________|           |________|          |_______|
+
+
+	** Capa logica: Para poder procesar las relaciones “muchos a muchos” las va a partir en entidades que se llaman: Entidades Débiles.
+		Estas entidades debiles son intermedias como la "Ent1-2", y va a cambiar las relaciones: La Ent1 se va a relacionar 1 a M con Ent1-2 y Ent2 igual 1 a M con Ent1-2, para poder relacionarce la Ent1-2 debe tener una llaves (#) ver cuadro:
+
+
+
+         ________                ________            ________
+	  	|		 |              |        |          |        |
+		| Ent1   |              | Ent2   |---------≡| Ent3   |
+		| # Ent1 |              | # Ent2 |          | # Ent3 |
+		|________|              |________|          |________|
+            |                     |
+			|		_________     |
+			|	   |         |    |
+			------≡| Ent1-2  |≡----
+				   | # Ent1  |
+                   | # Ent2  |
+                   |         |
+				   |_________|
+
+        Para la relación Ent2 y Ent3 se necesita una llave foranea ya que es una relacion 1 a M entre dos entidades fuertes. Esta llave
+        foranea se coloca en la entidad que recibe la pata de gallo:
+
+
+       
+         ________                ________            _________
+	  	|		 |              |        |          |         |
+		| Ent1   |              | Ent2   |---------≡| Ent3    |
+		| # Ent1 |              | # Ent2 |          | # Ent3  |
+		|________|              |________|          | *fk Ent2|
+            |		              |                 |_________|
+            |                     |
+			|		_________     |
+			|	   |         |    |
+			------≡| Ent1-2  |≡----
+				   | # Ent1  |
+                   | # Ent2  |
+                   |         |
+				   |_________| 
+
+
+		** Según el ejemplo: Tengo una entidad Usuarios (Ent1) y otra Rutas (Ent2) entonces un usuarios puede usar muchas rutas y
+		una ruta puede ser usada por muchos usuarios. Para crear la relacion creamos la entidad debil (Ent1-2) en donde almacenamos 
+		la relacion de esas rutas como los viajes que realiza el usuario, ademas puede tener otros atributos como el numero de silla
+		que usó el usuario.
+
+    ** Capa fisica: Este modelo va a ser el paso del modelo lógico hacia la representación que ya va a tener la Base de Datos.
+    En esta capa, ya cada uno de los datos empieza a entrar en las clasificaciones según su tipo de dato. En este nivel las lineas de 
+    las relaciones pasan ha ser flechas.
+
+
+
+Metodología básica de 9 pasos con Barker (Paso 1) Identificar Cuáles son las Entidades Resuelven Nuestro Problema:
+	
+	** Documentarse muy bien acerca del problema que se va a resolver.
+
+		- La entidad (o modelo) es nombrado en SINGULAR, la tabla se denomina en PLURAL.
+
+		*** Una buena técnica para determinar de forma natural una entidad, es identificar aquellos elementos que poseen atributos que
+		    los definen y que además aporta algo para definir el modelo del negocio. Definitivamente un elemento al que yo tenga que
+		    forzarle sus atributos, no es una entidad. ***
+
+    Ejemplos: Identificar la entidades de Aeropuertos:
+
+    							- Avión
+    							- Aerolinea
+    							- Ruta
+    							- Tripulante
+    							- Piloto
+    							- Aeropuerto
+    							- País
+    							- Ciudad
+    							- Pasajero
+
+
+Metodología básica de 9 pasos con Barker (Paso 2): Identificación de las Relaciones de las Entidades.
+
+	** Pueden existir relaciones entre entidades que se relacione entre ellas mismas.
+
+
+				| Avión	|Aerolinea 	|Ruta   |Tripulante	|Piloto	|Aeropuerto	|País 	|Ciudad	  |Pasajero
+	Avión		|   *   |    1:1    |  1:M  |   1:M     |  1:M  |   1:M     |  *    |   *     |   1:M
+	____________|_______|___________|_______|___________|_______|___________|_______|_________|___________
+    Aerolinea   |   1:M |    *      |  1:M  |	  1:M   |  1:M  |   1:M     |  *    |   *     |   1:M  
+    ____________|_______|___________|_______|___________|_______|___________|_______|_________|___________
+    Ruta        |   1:M |   1:M     |   *   |     *     |   *   |    1:M    |  1:1  |   *     |    *
+    ____________|_______|___________|_______|___________|_______|___________|_______|_________|___________
+    Tripulante  |   1:1 |   1:1     |   *   |     *     |   *   |    *      |   *   |   *     |    *
+    ____________|_______|___________|_______|___________|_______|___________|_______|_________|___________
+    Piloto      |   1:1 |   1:1     |   1:M |     *     |   *   |    *      |   *   |   *     |    * 
+    ____________|_______|___________|_______|___________|_______|___________|_______|_________|___________
+    Aeropuerto  |   1:M |   1:M     |   1:M |     *     |   *   |    *      |   1:1 |   1:1   |    1:M
+    ____________|_______|___________|_______|___________|_______|___________|_______|_________|___________
+    País        |   *   |    *      |   1:M |    1:M    |   1:M |    1:M    |   *   |    *    |    1:M
+    ____________|_______|___________|_______|___________|_______|___________|_______|_________|___________
+    Ciudad      |   1:M |   1:M     |   1:M |    1:M    |  1:M  |   1:M     |   *   |    *    |    1:M
+    ____________|_______|___________|_______|___________|_______|___________|_______|_________|___________
+    Pasajero    |   1:1 |   1:M     |   1:M |    1:M    |  1:M  |    1:M    |   *   |    *    |     *
+
+
+
+    ** Entidades Recursivas: Empleado: un empleado tiene un jefe , y a su vez el jefe tambien es un empleado de una empresa.
+
+
+
+Metodología básica de 9 pasos con Barker (Paso 3): Entidades y Relaciones
+
+	** Diagramar las entidades y las relaciones
+
+
+
+
+Metodología de Diseño (Correcciónes del paso 2 y 3)
+
+	En este ejemplo cuando la tabla de relaciones se divide por una diagonal quiere decir que son equivalentes, osea que en cada una
+	de la relaciones de un lado y otro debe haber consistencia: No puede ser que en un lado haya una relación y en la otra no, no 
+	importa si son diferentes relaciones lo que importa es que exitan en las dos o no de igual forma.
+
+	Para tener muy encuenta:
+	** Transitividad: Signfica que yo puedo llegar a una tabla desde una con la que este relacionada. No tiene que ser directamente,
+		para evitar redundancia.
+
+			Tengo: A --> B --> C
+				  Yo puedo llegar de A a C porque estoy relacionado con B y B a su vez con C.
+
+
+
+Metodología de Diseño (Paso 4): Asignar Atributos a las Entidades.
+
+	Hasta este punto no nos vamos a fijar en que motor de base de datos vamos a correr.
+
+	Para hacer un buen ejercicio hay que pensar en:
+
+		- ¿Que atributos voy a necesitar?
+		- ¿Cual va a ser la codificación que voy a utilizar?
+		- ¿Como los voy a trabajar dependiendo del tipo de dato?
+	    - El tipo de dato va a ser obligatorio o no obligatorio. Null o Not Nul
+		- Vamos a tener un identificador único de cada tabla, una llave primaria. Mínimo una por tabla.
+ 		- Para hacer mas fácil las consultas hay que tener una nomenclatura para cada tabla (como AV_ para avión) y así poder
+ 	      referirnos a los atributos que se repiten en varias tablas (como nombre).
+		- Hay que revisar el tipo de dato que vamos a usar, los identificadores se pueden trabajar como serial,
+		 así la misma base de datos se va a encargar de que el valor de ese identificador sea único e irrepetible.
+		- Definimos la obligatoriedad de los datos, las llaves primarias tienen que ser obligatorias.
+
+
+Metodología de Diseño (Solución del paso 4): Terminando de Aseignar Atributos a las Entidades
+
+	Revisar nuevamente los atributos creados para no tener errores
+
+
+
+Metodología de Diseño (Pasos 5, 6 y 7) 5. Generar un diagrama conceptual, 6. Modelo lógico, 7. Identificar nuevos atributos
+que generan nuestras entidades débiles.
+
+	Paso 5: Generar un diagrama conceptual (entidades, relaciones y atributos). Las relaciones siempre se van a hacer en
+			2 sentidos (A con B y B con A).
+
+	Paso 6: Modelo lógico:
+		Las relaciones se hacen por medio de entidades débiles, entre las entidades relacionadas, esto es porque no
+		podemos generar muchas llaves foráneas en ambas entidades (fuertes).
+
+		En estas entidades debiles se usan ambas llaves primarias de las entidades (fuertes) que tenían relación.
+
+		En las entidades debiles no debería haber tipos de datos seriales, estas tendrían que ser integer,
+		ya que las entidades debiles no tienen forma de tener consistencia con esa serialidad.
+
+	Paso 7: Identificar nuevos atributos que generan nuestras entidades débiles.
+
+		Por ejemplo un video en youtube puede ser visto por muchos usuarios y un usuario puede ver muchos videos, entonces creo la
+		tabla intermedia con la relación uno a muchos con usuario y una a muchos con el video de youtube, luego en esta tabla
+		intermedia pones un atributo timestamp para guardar cuando vio el video, otra puede ser cuantas veces vio el video, en
+		que momento dejo de ver el video o pauso, datos que son exclusivos de la relación.
+
+
+Metodología de Diseño (Paso 8): Construir el Diagrama del Modelo Físico
+
+	Para identificar un modelo cuando lo vea y saber en que paso de la metodologia se encuentra:
+		- Modelo Fisico : Lineas Rectas en las cajas de la entidad
+		- Modelo Logico : Lineas Curvas en las cajas de la entidad
+
+	- Las lineas de las relaciones van a ser lineas rectas, la relación uno a muchos vamos a crear una linea con un sentido que
+	termina en cabeza de flecha. Las lineas 1 a 1 o 0 a 1 se mantienen como antes.
+
+	- Las llaves foráneas en entidades debiles refieren o apuntan hacia su llave primaria en entidades fuertes.
+
+	- En el modelo fisico hay que poner el tipo de dato de acuerdo a la base de datos en la que vamos a trabajar.
+
+
+
+Metodología de Diseño (Paso 9): Pasar al estándar de la base de datos (SQL)
+
+	Script clase 23
+
+
+
+Reto con el paso 4 de la Metodología de Diseño
+
+
+
+	
