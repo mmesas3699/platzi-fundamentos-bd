@@ -542,4 +542,86 @@ Reto con el paso 4 de la Metodología de Diseño
 
 
 
+Atomicidad y consistencia
+
+	A: atomicidad
+	C: consistencia
+	I: isolación / aislamiento
+	D: durabilidad / persistencia
+
+	Atomicidad: cuando para realizar una transacción esta depende de varios pasos (este conjunto de pasos son la 				minima unidad para poder realizar la transacción) y si en alguno de los pasos se presentace un error
+				se tiene que devolver todo a su estado inicial "Rollback".
+
+	Consistencia: cuando se hace una transacción y esta tiene que pasar de un estado valido a otro estado valido.
+
+				Ejemplo: Tengo una cuenta bancaria con un banco X y este banco no me permite tener menos de $10 en
+						la cuenta y si yo quiero hacer una transferencia de 40 y mi saldo son 40 no podria porque la
+						base de datos tendria una restricción.
+
+
+Aislamiento y durabilidad
+
+	Aislamiento: Permite que cada transacción sea independiente y no va a iniciar otra hasta que se haya hecho 
+				commit de la primera.
+
+	Durabilidad: Esta propiedad asegura que una vez realizada la operación, ésta persistirá y no se podrá deshacer
+				 aunque falle el sistema y que de esta forma los datos sobrevivan de alguna manera.
+
+
+Bases de datos In-Memory (Cambio de árboles a columnar) 
+
+	Las bases de datos SQL (basadas en arboles) hacen una busqueda por cada uno de los campos de cada una de las
+	filas hasta llegar al resultado. Por el contrario las bases de datos In-Memory (columnares) seleccionan una 
+	columna y sobre ella realizan la busqueda.
+
+
+	Ejemplo:
+
+			          | In-Memory
+			          |
+			         \ /
+			         ____________
+					|  ID  | Nom | 
+			        |______|_____|
+			        |      |     |
+          Arbol --->|  10  | abc |
+			        |      |     |
+				
+
+Otros tipos de bases de datos de la industria
+
+	Una base de datos orientada a grafos representa la información como nodos de un grafo y sus relaciones con las
+	aristas del mismo, de manera que se pueda usar teoría de grafos para recorrer la base de datos ya que esta 
+	puede describir atributos de los nodos (entidades) y las aristas (relaciones).
+
+
+
+Bases de datos In-Memory con indexación columnar 
+	
+	http://www.oracle.com/technetwork/es/articles/database-performance/racle-database-12c-in-memory-2595521-esa.html
+
+
+Definiendo el Proyecto y Generando Entidades de PlatziStore: Pasos 1 y 2
+
+	Entidades PlatziStore:
+
+		Item
+		Cliente
+		Método de compra
+		Método de pago
+		Proveedor
+		Carrito
+
+	Siempre hay que tratar de documentar una base de datos como si fuera código (con notas o comentarios), de esa
+	manera sabe porque tomamos ciertas decisiones en la estructura de la base de datos (relaciones, entidades).
+
+	Podemos utilizar una notación para los métodos (mCompra y mPago), no hay que utilizar tildes aunque la base de
+	datos acepte caracteres especiales no es recomendable debido a la diferente configuración en los teclados.
+
+	Hay casos donde existen relaciones recursivas, es decir; cuando en una entidad existe relación con sigo
+	misma (un jefe que tiene a su cargo otros jefes) dando así una relación jerárquica.
+
+	Debido a la transitividad algunas entidades no se van a relacionar directamente unas con otras
+	(cliente con item, mCompra y mPago) aunque si tengan relación.
+
 	
