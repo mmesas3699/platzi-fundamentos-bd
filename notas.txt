@@ -637,9 +637,192 @@ Definir la Estructura de la Tabla Cliente del Proyecto: Pasos 3 y 4: (PlatziStor
 
 Terminando de Estructurar Nuestras Tablas (Continuación del paso 4): (PlatziStore/clase31.xls)
 
-	Se recomienda nombrar los campos de las tablas colocando primero el nombre de la tabla + guion bajo + nombre atributo
+	Se recomienda nombrar los campos de las tablas colocando primero el nombre de la tabla + guion bajo + 
+	nombre atributo
 
 	Cliente_ID
 	Cliente_cuentaPlatzi
 
+
+Metodologia de diseño (Paso 5): Diagrama conceptual (platzistore/Paso 5 - Modelo Conceptual.png)
+
+	Se diagrama las entidades y sus relaciones, pero esta vez las entidades van a tener sus atributos.
+
+	** Las llaves primarias de denotan con: #
+	** Los campos obligatorios se denotan con: *
+	** Los campos obcionales se denotan con: o
+
+
+Metodología de diseño (Paso 6 y 7): Modelo lógico y entidades debiles (platzistore/Paso-6-modelo logico.png)
+
+	Paso 6 = Crear el modelo logico
+
+	Las entidades debiles y entidades fuertes dependen de las relaciones que se tengan entre ellas:
+
+	** La relacion muchos a muchos dentro de una base de datos no puede existir, por esto en el modelo logico
+	lo que se debe hacer es 'romper las relaciones' creando entidades debiles y entidades fuertes:
+
+		Ejemplo: Tengo dos entidades A y B que se relacionan muchos a muchos (estos son mis entidades fuertes), 
+				para romper esta relación creo una tercera entidad que se va a llamar AB y cuyos atributos van
+				ha ser las llaves primarias de las entidades fuertes:
+
+				 A 		   				 B
+				# a       				# b
+
+
+							AB
+						   # a
+						   # b
+						     c --> las entidades debiles pueden tener sus propios atributos
+
+				Ahora la entidad A se va a relacionar uno a muchos con AB y de igual forma la entidad B con AB
+
+	** En la relaciones uno a muchos (A a B respectivamente) las llaves foraneas de B son las llaves primarias de A
+
+	** Los atributos que sean llaves primarias de las entidades fuertes y que sean seriales no pueden ser
+		seriales en las entidades debiles, ya que en las entidades debiles se guardan las relaciones entre entidades
+		fuertes. Para esto los (ID) se deben almacenar despues de creadas las entidades fuertes.
+
+	Paso 7 = Crear las entidades debiles en la definicion de la BD clase31.xls - Definicion Paso 7 - Nuevos atributos en entidades débiles.pdf
+
+
+Solución de atributos de entidad del proyecto - Atributos adicionales a entidad débil creada
+
+	por convención las entidades débiles se nombran por orden alfabético, por ejemplo, carrito
+	empieza por C mientras item empieza por I, por esta razón, la entidad débil se llama carrito-item y NO 
+	item-carrito.
+
+
+Metodología de Diseño (Paso 8) Paso 8 - Modelo Fisico.png
+	
+	Paso 8 = Modelo fisico
+
+	* Las entidades ahora se llaman tablas
+	* Las relaciones ahora se representan por flechas
+	* La dirección de las flechas inician en la tabla que tiene la FK y apunta a la tabla que tiene la llave primaria
+
+				FK
+		FK -----------> PK
+
+	* Dejamos de usar #, * y º para referinos a llaves primarias, campos obligatorios y opcionales.
+	* Se definen los tipos de datos, dependiendo del motor SQL (MySQL, SQLServer, MariaDB, PostgreSQL).
+
+
+Llevando nuestro proyecto a SQL (Paso 9) paso9_PlatziStore.sql
+
+	** Usar los nombre de las tablas siempre en mayuscula
+
+	create table PROVEEDOR
+	(
+    	PROV_ID              numeric(5,0) not null,
+	   PROV_CODCC           varchar(15) not null comment 'Codigo Camara de Comercio',
+	   PROV_NOMBRE          varchar(90) not null,
+	   PROV_DESC            varchar(300) not null,
+	   PROV_FECHAINI        timestamp not null,
+	   PROV_FECHAUCOMPRA    timestamp,
+	   PROV_MONTOUCOMPRA    numeric(7,0),
+	   PROV_MONEDA          varchar(5),
+	   primary key (PROV_ID, PROV_CODCC)
+	);
+
+
+	** Es posible colocar comentarios en la creacion de la base de datos para campos en particular
+
+
+Dependencias funcionales
+	
+	* Reflexiva: (Una sola tabla) Si tengo un dato puedo obtener un dato B. Si tengo el numero de CC
+				de una persona puedo obtener su nombre o apellido (si los datos estan en la misma tabla)
+
+	* Aumentativa: se refiere que podemos usar tambien llaves foraneas para obtener datos de las otras tablas
+
+	* Transitiva: Si tengo una tabla A que esta relacionada con una tabla B y tengo un tabla C relacionada 
+				con B no tengo que tener relación entre A y C para poder traer los datos de C cuando hago
+				una consulta de A.
+
+
+Normalización, llevando el proyecto hasta tercera forma normal (primera forma normal)
+
+
+	Principio de Atomicidad, dejar el mínimo valor posible de un dato:
+
+		Por ejemplo en el atributo Nombre, el cual contiene nombres y apellidos, lo podemos segmentar en los
+		atributos Nombre, Segundo Nombre y Apellidos. 
+
+	** Para poder estar en la primera forma normal es necesario e indispensable que se tenga en cada 
+		tabla una llave primaria ademas de tener todo en el mínimo valor posible.
+
+
+Normalización, llevando mi proyecto hasta tercera forma normal (segunda forma normal)
+
+	La regla de la Segunda Forma Normal (2FN) establece que todas las dependencias parciales se deben
+	eliminar y separar dentro de sus propias tablas. Una dependencia parcial es un término que describe 
+	a aquellos datos que no dependen de la clave de la tabla para identificarlos. 
+
+
+	Tenemos una tabla inicial:
+
+	identificacion	|	Primer nombre 	| Segundo nombre 	| Primer apellido 	|	Ciudad 		| 	Pais
+		12345			Ana 				Maria 				Mesa 				Bogota			Colombia
+
+	Si yo modifico la ciudad y la cambio por Lima el pais ya no seria Colombia (Esto es un problema si me
+	olvida modificar tambien el pais)
+
+	** Con la segunda forma normal independizo los datos creando una tabla para los datos de la persona, una para 
+	las ciudades y otra para los paises:
+
+	PERSONAS
+	id 	| 	1 Nombre |	2 Nombre |	Apellido |	Cod_Ciudad
+
+
+	CIUDADES
+	cod_ciudad 	|	nombre 	| 	cod_pais
+
+
+	PAISES 
+	cod_pais 	|	nombre 
+
+
+	Ahora son independientes y puedo modificar la ciudad de la persona sin afectar el pais.
+
+	** La Tercera forma normal:
+		dice que cada uno de los atributos que no sean claves dentro de la tabla pueden llegar a ser 
+		candidatos a ser clave
+
+
+Normalización, llevando mi proyecto hasta tercera forma normal (Cuarta y quinta forma normal)
+	
+	En 4FN obligatoriamente no podemos repetir datos en una tabla, solo tenemos combinaciones únicas y 
+	todas las llaves van a poder ser si o si obligatoriamente llaves primarias.
+
+	| 	ITEM 		| 	TALLA 	|	COLOR 	|
+		camisa			XL 			blanco
+		panatalon		L 			negro
+		camisa			M 			azul
+		playera			XL 			blanco
+
+
+	En esta tabla se repiten los datos de todas las columnas (camisa, XL, blanco), para poner esto en 4FN
+	se deben crear 3 tablas (ITEMS[id, descripcion], TALLAS[id, descripcion], COLORES[id, descripcion]	
+
+
+	En 5FN es importante tener 2 tablas que están en 4FN, cada dependencia de union (join) va a estar 
+	hecho por claves candidatas y no va puede estar hecho por condiciones que no se vayan a cumplir.
+
+
+Comenzando con SQL
+
+	Ventajas que da SQL:
+	
+	**Redundancia **: Eliminación de Renundancia de Datos
+	Concurrencia : Posibilidad de accedes a datos de manera concurrente.
+	Aislamiento: Permite realizar operaciones independientes
+	Integridad: PK, not null, true , false o FK
+	Inconsistencia: Permite evitar la insconsistencia de datos (Bogotá con tilde 
+	en un registro, Bogota sin tilde en otro registro) refiriendose al mismo dato
+	Seguridad: Autenticación, LDAP, Kerberos
+	Acceso : Permite manejas esquemas de seguridad, ROLES ó noveles de accesos
+
+	DML: DATA MODEL LANGUAGE
+	DDL: DATA DEFINITION LANGUAGE
 
