@@ -549,7 +549,8 @@ Atomicidad y consistencia
 	I: isolación / aislamiento
 	D: durabilidad / persistencia
 
-	Atomicidad: cuando para realizar una transacción esta depende de varios pasos (este conjunto de pasos son la 				minima unidad para poder realizar la transacción) y si en alguno de los pasos se presentace un error
+	Atomicidad: cuando para realizar una transacción esta depende de varios pasos (este conjunto de pasos son la 
+				minima unidad para poder realizar la transacción) y si en alguno de los pasos se presentace un error
 				se tiene que devolver todo a su estado inicial "Rollback".
 
 	Consistencia: cuando se hace una transacción y esta tiene que pasar de un estado valido a otro estado valido.
@@ -613,7 +614,7 @@ Definiendo el Proyecto y Generando Entidades de PlatziStore: Pasos 1 y 2
 		Carrito
 
 	Siempre hay que tratar de documentar una base de datos como si fuera código (con notas o comentarios), de esa
-	manera sabe porque tomamos ciertas decisiones en la estructura de la base de datos (relaciones, entidades).
+	manera sabemos porque tomamos ciertas decisiones en la estructura de la base de datos (relaciones, entidades).
 
 	Podemos utilizar una notación para los métodos (mCompra y mPago), no hay que utilizar tildes aunque la base de
 	datos acepte caracteres especiales no es recomendable debido a la diferente configuración en los teclados.
@@ -624,4 +625,21 @@ Definiendo el Proyecto y Generando Entidades de PlatziStore: Pasos 1 y 2
 	Debido a la transitividad algunas entidades no se van a relacionar directamente unas con otras
 	(cliente con item, mCompra y mPago) aunque si tengan relación.
 
-	
+
+Definir la Estructura de la Tabla Cliente del Proyecto: Pasos 3 y 4: (PlatziStore/clase31.xls)
+
+	** Se recomienda usar el modelo de la hoja Definición. Para la definición de los modelos
+
+	CHAR => Crea un espacio en memoria con el valor designado así no se use todo.
+	VARCHAR => Crea un espacio en memoria con los caracteres ingresados y con el limite máximo que se designa.
+	TIMESTAMP = año / mes / dia / hora
+
+
+Terminando de Estructurar Nuestras Tablas (Continuación del paso 4): (PlatziStore/clase31.xls)
+
+	Se recomienda nombrar los campos de las tablas colocando primero el nombre de la tabla + guion bajo + nombre atributo
+
+	Cliente_ID
+	Cliente_cuentaPlatzi
+
+
