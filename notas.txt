@@ -826,3 +826,221 @@ Comenzando con SQL
 	DML: DATA MODEL LANGUAGE
 	DDL: DATA DEFINITION LANGUAGE
 
+
+DDL: Data Definition Language y DML: Data Manipulation Languaje
+
+	DDL (Data definition language): Son los comandos que sirven para crear o alterar o eliminar una tabla
+
+		** create aplica a:
+
+			create table 		# Permite crear una tabla.
+			create view 		# Permite crear una vista.
+			create procedure 	# Permite crear un proceso.
+			create index 		# Permite crear un índice.
+			create schema 		# Permite crear un esquema.
+
+			** triggers = acciones que se activan en un momento en el tiempo
+			** schema = conjunto de tablas que tienen algo en común. Un motor de base de datos puede tener varios 
+						esquemas o bases de datos.
+
+		** alter aplica a:
+
+			alter table
+			alter view
+			alter prodecure
+
+
+		** drop aplica a:
+
+			drop table
+			drop view
+
+
+	DML (Data manipulation table)
+
+		select 		# Permite seleccionar uno o muchos atributos de una o muchas tablas.
+		join 		# Permite combinar registros de dos o más tablas.
+		insert 		# Permite insertar en una table una nueva tupla.
+		update 		# Permite actualizar uno o muchos atributos.
+		delete 		# Permite eliminar uno o muchos atributos.
+		replace 	# Permite actualizar un solo campo.
+
+
+ACID desde lo no relacional
+
+	A tomicity: Asegurar que la transacción se realice o no, sin quedar a medias ante fallos.
+	C onsistency: Asegurar el estado de validez de los datos en todo momento.
+	I solation: Asegurar independencia entre transacciones.
+	D urability: Asegurar la persistencia de la transacción ante cualquier fallo.
+
+
+CAP
+
+	Consistency  : Consistencia
+	Availability : Disponibilidad
+	Partition 	 : Particionamiento
+
+	** Las bases de datos noSQL funcionan con nodos (servidores o pc) que replican la información en todos los
+		nodos, en caso de que se caiga un nodo los otros esten disponibles.
+
+	C = Se espera que al consultar cualquier nodo obtenga un dato valido o la ultima versión de la información.
+	A = Cuando haga una solicitud no me va a importar que nodo del sistema esta up time o down time o sin
+		funcionamiento. Un dato debe estar replicado en al menos tres nodos.
+	P = Es como yo parto esa información por lo menos en tres nodos para evitar que se pierdan mensajes. 
+		Tolerancia a fallas.
+
+	** Las bases de datos NoSQL están pensadas para ser escalables y distribuidas. 
+		Por ser distribuidas tendremos que tener en cuenta el teorema CAP.
+
+	** El teorema CAP, dice que en sistemas distribuidos es imposible garantizar a la vez: Consistencia,
+	   Disponibilidad y Particionamiento.
+
+		Para ser escalables y distribuidas, las bases de datos NoSQL, siguen distintos métodos, 
+		por lo que no todas cumplen los mismos puntos del teorema CAP.
+
+		Según las condiciones que cumplan se pueden tener:
+
+		AP: garantizan Disponibilidad y Particionamiento, pero no la consistencia, al menos de forma total. 
+			Algunas de ellas consiguen una consistencia parcial a través de la replicación y la verificación.
+
+		CP: garantizan Consistencia y Particionamiento. Para lograr la consistencia y replicar los datos a 
+			través de los nodos, sacrifican la disponibilidad.
+
+		CA: garantizan Consistencia y Disponibilidad, pero tienen problemas con la tolerancia a particiones.
+			Este problema lo suelen gestionar replicando los datos.
+
+
+Scale Out y Scale Up
+	
+	En las bases de datos noSQL el procesamiento es mucho mas rapido que las relacionales tradicionales:
+
+	Esto porque en las noSQL tengo la informacion repartida en varios nodos y cuando quiero buscar algo los nodos
+	se activan al mismo tiempo y buscan la informacion muchos mas rapido al tener menos datos en los que buscar.
+	En cambio en las relacionales el motor de base de datos tiene que buscar por los indices uno por uno.
+
+	Ejercicio de las cartas !!!
+
+
+¿Scale out o Scale up?
+
+	Scale Up => Crecer con el mismo hardware, (memoria, procesador, etc).
+	Scale Out => Escalamiento horizontal, mas maquinas con menores especificaciones.
+
+
+DBMS en nube para poder iniciar una aplicación propia
+
+
+Estructura básica de un Query 
+
+
+Aprendiendo a Hacer más Querys
+
+
+Estructura básica del Query con más de una tabla
+
+
+Estructura básica del Query con más de una tabla 2
+
+
+Tuplas y más tuplas
+	
+	En informática, o concretamente en el contexto de una base de datos relacional, un registro 
+	(también llamado fila o tupla) representa un objeto único de datos implícitamente estructurados en una tabla
+
+	El número de tuplas se denomina cardinalidad, la cardinalidad varía con el tiempo.
+
+
+Insertar registros
+
+
+Joins
+
+	
+Noo SQL Aplicado, Planteando el Problema
+
+	RDBMS (DB relacionales): Escalabilidad vertical en una sola maquina
+			Mejores niveles de servicio a nivel de bases de datos
+			Sin embargo es limitado en crecimiento
+
+
+	Estructuras tipo cluster:
+
+							sharding
+									 ___________
+									|			|
+									|___________|
+
+										^	|
+										|	v
+
+									 ___________
+									|			|  <--- Nodo maestro
+		hash, llaves compartidas	|___________|
+									  |	  |   |
+					 _________________|   |   |_____________
+					|					  |					|
+					|                     |					|
+
+					S1					  S2 				S3
+
+
+	sharding = son paquetes o modulos que contienen partes de la BD (o replicas), estos permiten añadir mas shards
+				con el fin de poder escalar.
+
+				Los shards se comunican por medio de un nodo maestro que es el que contiene las llaves para
+				permitir la comunicacion entre los shards
+
+
+Aplicando NoSQL: Colecciones y Shards
+
+	Colecciones : objetos principales de la Base de Datos no relacional, donde se pueden guarda la información
+				  utilizando distintas llaves para acceder a datos.
+
+		ejemplo (JSON):
+			
+			name : ‘Julieta’
+
+	Pero la colección se debe especificarse en una ubicación, en un shard especifico.
+
+	La información se puede distribuir en varios shards, esto incluye a que los datos de una colección
+	pueden estar en 2 o mas shards.
+
+	RAID 1 : Espejo de datos Nodo A es igual que en un Nodo B, se necesita mucha velocidad
+
+				A>A
+				A<A
+
+
+	REPLICA : Mediante Replica, asegura alta disponibilidad
+			
+				B->B
+
+
+	LOG: para averiguar como estaba la data en un determinado tiempo.
+			
+				Log 1 : valor 3
+				Log 2: valor 4
+
+			Quiere decir que surgio 1 dato modificado alterando el valor
+
+	Snapshots (snaps) : Imagenes de un servidor, cluster, nodo, en un determinado momento. (para luego 
+						restaurar o replicar la información en otro ambiente)
+
+
+
+Aplicando noSQL: Integración de Comunicaciones y Hardware en una Base de Datos Scale OUT
+
+	Variables a considerar en la administración en NoSQL:
+
+	N numero de Replicas , Numero de Nodos (en hadoop recomienda 3 replicas, o más)
+	W Numero de Replicas Exitosas para hacer Update (se debe esperar que sea 3 siempre y cuando tengas 3 nodos)
+	R Replicas. Para consultar para lectura, cuantos nodos debo consultar para saber que la info es consistente.
+
+	Formula
+		W + R > N = Para que sea consistente
+
+
+Aplicando noSQL: Integrando JSON a Bases de Datos No Relacionales
+	
+
+Conclusiones del curso
